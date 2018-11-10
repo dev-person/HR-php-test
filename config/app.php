@@ -163,11 +163,12 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        TwigBridge\ServiceProvider::class,
 
         /*
          * Package Service Providers...
          */
+        ArtemSchander\L5Modular\ModuleServiceProvider::class,
+        TwigBridge\ServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -177,7 +178,6 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
     ],
 
     /*

@@ -1,0 +1,5 @@
+<?php
+
+/**
+ *	Weather Helper  
+ */

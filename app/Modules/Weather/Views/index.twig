@@ -1,0 +1,43 @@
+{% extends "layouts/app.twig" %}
+
+{% block content %}
+    <div class="position-ref full-height">
+        <div class="content weather">
+            <div class="current-weather">
+                <div class="left">
+                    <canvas class="icon" width="128" height="128"></canvas>
+                    <p id="summary">Clear</p></div>
+                <div class="right"><p id="aprox" style="font-size: 1.2em">Aprox location</p>
+                    <input id="location" type="text" value="" style="width: 187.109px;">
+                    <h2>Today, <span class="day">Saturday 10</span></h2>
+                    <h3 class="temperature">Temperature: <span class="temp">-11 °C</span></h3>
+                    <h3>Wind speed: <span id="wind">1.93m/s</span></h3>
+                    <h3>Humidity: <span id="humidity">81%</span></h3></div>
+            </div>
+            <div class="week-weather">
+                <div class="day-of-week"><h2 class="day">Sun 11</h2>
+                    <canvas class="icon" width="128" height="128"></canvas>
+                    <h3 class="temperature temp">-12 °C</h3></div>
+                <div class="day-of-week"><h2 class="day">Mon 12</h2>
+                    <canvas class="icon" width="128" height="128"></canvas>
+                    <h3 class="temperature temp">-8 °C</h3></div>
+                <div class="day-of-week"><h2 class="day">Tue 13</h2>
+                    <canvas class="icon" width="128" height="128"></canvas>
+                    <h3 class="temperature temp">-7 °C</h3></div>
+                <div class="day-of-week"><h2 class="day">Wed 14</h2>
+                    <canvas class="icon" width="128" height="128"></canvas>
+                    <h3 class="temperature temp">-6 °C</h3></div>
+                <div class="day-of-week"><h2 class="day">Thu 15</h2>
+                    <canvas class="icon" width="128" height="128"></canvas>
+                    <h3 class="temperature temp">-3 °C</h3></div>
+                <div class="day-of-week"><h2 class="day">Fri 16</h2>
+                    <canvas class="icon" width="128" height="128"></canvas>
+                    <h3 class="temperature temp">-4 °C</h3></div>
+                <div class="day-of-week"><h2 class="day">Sat 17</h2>
+                    <canvas class="icon" width="128" height="128"></canvas>
+                    <h3 class="temperature temp">-5 °C</h3></div>
+            </div>
+        </div>
+        <!-- END of .week-weather -->
+    </div>
+{% endblock %}
