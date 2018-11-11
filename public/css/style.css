@@ -53,7 +53,12 @@ html, body {
 ========== */
 
 .weather {
-    padding: 0px 17%;
+    padding: 0px 30%;
+}
+
+.current-weather.day-of-week canvas {
+    width: 256px;
+    height: 256px;
 }
 
 .weather-bar a {
@@ -94,9 +99,9 @@ html, body {
     -ms-flex-align: center;
     align-items: center;
     text-align: center;
-    border-bottom: 0.2em solid #aaa;
-    padding-bottom: 2em;
-    margin-bottom: 2em;
+    border-bottom: 0.1em solid #aaa;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
 }
 .left {
     margin-right: 6em;
@@ -121,27 +126,22 @@ canvas {
     font-size: 2em;
     font-weight: 800;
     text-align: center;
-    border-bottom: 0.1em solid #aaa;
+    border-bottom: 1px solid #aaa;
     margin-bottom: 0.1em;
 } #location:hover,
   #location:focus {
       border-bottom: 0.1em solid #0cf;
   }
 .right h2 {
-    font-size: 2em;
+    font-size: 19px;
     font-weight: 400;
 }
-.temperature {
+.temperature.temp {
+    font-size: 15px;
+    padding: 10px 0px;
     margin-top: 0.6em;
 }
-.temperature:hover, .temp:hover {
-    cursor: pointer;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-} .temperature:hover .temp, .temp:hover {
+.temperature:hover .temp, .temp:hover {
       color: #0cf;
   }
 .temp,

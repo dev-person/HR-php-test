@@ -179,6 +179,8 @@ return [
             'head',
             'last',
             'mix',
+            'time',
+            'getWeatherCurrentBar'
         ],
 
         /*
@@ -210,7 +212,8 @@ return [
         |
         */
         'filters' => [
-            'get' => 'data_get',    
+            'get' => 'data_get',
+            'timeHelper' => 'timeHelper',
         ],
     ],  
 ];

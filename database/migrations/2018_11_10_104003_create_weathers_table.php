@@ -21,7 +21,11 @@ class CreateWeathersTable extends Migration
             $table->string('locationName')->default(0);
             $table->string('apiClass')->default(0);
             $table->string('location')->default(0);
+            $table->string('humidity')->default('N/A');
+            $table->string('windSpeed')->default('N/A');
             $table->integer('temperature')->default(0);
+            $table->integer('temperatureMin')->default(0);
+            $table->boolean('current')->default(0);
             $table->integer('time')->default(0);
         });
     }

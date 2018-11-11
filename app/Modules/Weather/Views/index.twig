@@ -3,40 +3,51 @@
 {% block content %}
     <div class="position-ref full-height">
         <div class="content weather">
-            <div class="current-weather">
-                <div class="left">
-                    <canvas class="icon" width="128" height="128"></canvas>
-                    <p id="summary">Clear</p></div>
-                <div class="right"><p id="aprox" style="font-size: 1.2em">Aprox location</p>
-                    <input id="location" type="text" value="" style="width: 187.109px;">
-                    <h2>Today, <span class="day">Saturday 10</span></h2>
-                    <h3 class="temperature">Temperature: <span class="temp">-11 °C</span></h3>
-                    <h3>Wind speed: <span id="wind">1.93m/s</span></h3>
-                    <h3>Humidity: <span id="humidity">81%</span></h3></div>
-            </div>
-            <div class="week-weather">
-                <div class="day-of-week"><h2 class="day">Sun 11</h2>
-                    <canvas class="icon" width="128" height="128"></canvas>
-                    <h3 class="temperature temp">-12 °C</h3></div>
-                <div class="day-of-week"><h2 class="day">Mon 12</h2>
-                    <canvas class="icon" width="128" height="128"></canvas>
-                    <h3 class="temperature temp">-8 °C</h3></div>
-                <div class="day-of-week"><h2 class="day">Tue 13</h2>
-                    <canvas class="icon" width="128" height="128"></canvas>
-                    <h3 class="temperature temp">-7 °C</h3></div>
-                <div class="day-of-week"><h2 class="day">Wed 14</h2>
-                    <canvas class="icon" width="128" height="128"></canvas>
-                    <h3 class="temperature temp">-6 °C</h3></div>
-                <div class="day-of-week"><h2 class="day">Thu 15</h2>
-                    <canvas class="icon" width="128" height="128"></canvas>
-                    <h3 class="temperature temp">-3 °C</h3></div>
-                <div class="day-of-week"><h2 class="day">Fri 16</h2>
-                    <canvas class="icon" width="128" height="128"></canvas>
-                    <h3 class="temperature temp">-4 °C</h3></div>
-                <div class="day-of-week"><h2 class="day">Sat 17</h2>
-                    <canvas class="icon" width="128" height="128"></canvas>
-                    <h3 class="temperature temp">-5 °C</h3></div>
-            </div>
+
+            {% if data|length > 0 %}
+                {% for item in data %}
+                    {% if item.current == 1 %}
+                        <div data-icon="{{ item.icon }}" class="current-weather day-of-week">
+                            <div class="left">
+                                <canvas id="icon-{{ item.id }}" width="240" height="240"></canvas>
+                                <p id="summary">{{ item.summary }}</p>
+                            </div>
+                            <div class="right">
+                                <input id="location" type="text" value="{{ item.locationName }}">
+                                <h2>{{ trans('weather.today') }},
+                                    <span class="day">{{ item.time|timeHelper('day-and-weekFull') }}</span>
+                                </h2>
+                                <p class="temperature">
+                                    {{ trans('weather.temperature') }}:
+                                    <span class="temp">{{ item.temperature }}°C</span>
+                                </p>
+                                <p>
+                                    {{ trans('weather.wind_speed') }}:
+                                    <span id="wind">{{ item.windSpeed }}m/s</span>
+                                </p>
+                                <p>
+                                    {{ trans('weather.humidity') }}:
+                                    <span id="humidity">{{ item.humidity }}%</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="week-weather">
+                    {% elseif (item.time > time() + 86400) %}
+                        <div data-icon="{{ item.icon }}" class="day-of-week">
+                            <h4 class="day">{{ item.time|timeHelper('day-and-week') }}</h4>
+                                <canvas id="icon-{{ item.id }}" width="128" height="128"></canvas>
+                            <h3 class="temperature temp">{{ item.temperature }} °C / {{ item.temperatureMin }} °C</h3>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                  </div>
+            {% else %}
+                <div class="current-weather">
+                    <h3 class="temperature temp">Weather not loaded</h3>
+                </div>
+                <center>Please, configure Weather Module in env file</center>
+            {% endif %}
+
         </div>
         <!-- END of .week-weather -->
     </div>

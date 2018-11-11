@@ -19,9 +19,10 @@ class WeatherController extends Controller
      */
     public function index()
     {
-        $model = Weather::query()->where([
-            'location' => config('modules.weather.location')
-        ])->all();
+        $model = Weather::where([
+            'location' => config('modules.weather.location'),
+            'apiClass' => config('modules.weather.api-class')
+        ])->orderBy('current', 'DESC')->get();
 
         return view("Weather::index")->with(['data' => $model]);
     }

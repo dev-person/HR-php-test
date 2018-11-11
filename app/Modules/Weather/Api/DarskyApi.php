@@ -13,8 +13,8 @@ final class DarskyApi implements IWeatherApi
     protected $apiName = 'Dark Sky API';
     /** @var array  */
     protected $initializedParams = [];
-
-    public $resultRequestApi;
+    /** @var  mixed */
+    public $resultRequestApi, $geocodeData;
 
     /**
      * @param $params
@@ -45,7 +45,6 @@ final class DarskyApi implements IWeatherApi
     public function init($params)
     {
         $this->initializedParams = $params;
-        $this->initConfiguration($this->initializedParams);
         $this->initApi($this->initializedParams);
 
         return $this;
@@ -69,27 +68,44 @@ final class DarskyApi implements IWeatherApi
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         }
-        curl_setopt($ch, CURLOPT_URL, implode('/', [$this->apiUrl, $buildUrl]));
+        curl_setopt($ch, CURLOPT_URL, implode('/', [
+            $this->apiUrl, $buildUrl, '?exclude=minutely,hourly,flags'
+        ]));
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
         $this->resultRequestApi = json_decode(curl_exec($ch));
+        $this->resultRequestApi->locationName = $this->geocodeData()->text;
+        $this->resultRequestApi->currently->current = true;
     }
 
     /**
-     * @param $params
-     * @param array $preloadParams
+     * Get data of location
+     * @return mixed
      */
-    public function initConfiguration($params, $preloadParams = [])
+    public function geocodeData()
     {
-        if (empty($preloadParams)) {
-            foreach ($params as $param => $value) {
-                //... code for reset params
-            }
-        } else {
-            $this->resultRequestApi = array_merge(
-                $this->resultRequestApi,
-                $preloadParams
+        if (empty($this->geocodeData)) {
+            $googleApis[] = 'http://geocode-maps.yandex.ru/1.x/?format=json&';
+            $googleApis[] = 'kind=locality&';
+            $googleApis[] = 'geocode=' . implode(',',
+                    array_reverse(
+                        explode(',', $this->initializedParams['location'])
+                    )
+                );
+
+            $result = file_get_contents(
+                implode('', $googleApis)
             );
+
+            $this->geocodeData = json_decode($result)
+                ->response
+                ->GeoObjectCollection
+                ->featureMember[0]
+                ->GeoObject
+                ->metaDataProperty
+                ->GeocoderMetaData;
         }
+
+        return $this->geocodeData;
     }
 }

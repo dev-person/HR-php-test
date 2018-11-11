@@ -7,20 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 class Weather extends Model {
 
     protected $fillable = [
-        'summary', 'icon', 'precipType',
+        'summary', 'icon', 'windSpeed', 'precipType',
         'locationName', 'temperature', 'time',
+        'current', 'humidity'
     ];
 
     public $timestamps = false;
 
-    /**
-     * @return array
-     */
-    public function rules()
+    public static function boot()
     {
-        return [
-            'apiClass' => 'required',
-            'time'  => 'required|unique:weathers',
-        ];
+        self::creating(function($model){
+            $model->temperature = ($model->temperature - 32) / 1.8;
+            $model->temperatureMin = ($model->temperatureMin - 32) / 1.8;
+        });
+
+        self::updating(function($model){
+            $model->temperature = ($model->temperature - 32) / 1.8;
+            $model->temperatureMin = ($model->temperatureMin - 32) / 1.8;
+        });
     }
 }

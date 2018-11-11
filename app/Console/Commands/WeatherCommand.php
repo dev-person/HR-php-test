@@ -41,6 +41,7 @@ class WeatherCommand extends Command
     public function __construct()
     {
         parent::__construct();
+
         $this->params = config('modules.weather');
         $this->apiClass = $this->params['api-class'];
     }
@@ -52,30 +53,49 @@ class WeatherCommand extends Command
      */
     public function handle()
     {
-        $result = call_user_func([new $this->apiClass, 'load'], $this->params)->resultRequestApi;
+        $result = call_user_func([new $this->apiClass, 'load'], $this->params)
+            ->resultRequestApi;
 
-        foreach ($result->daily->data as $data) {
-            $model = new Weather;
-            $model->fill((array)$data);
-            $model->apiClass = $this->apiClass;
-            $model->location = implode(',', [
-                $result->latitude,
-                $result->longitude
+        $model = new Weather;
+
+        $this->currentlyUpdate($result->currently, $model, $result);
+        $this->dailyUpdate($result->daily->data, $model, $result);
+    }
+
+    /**
+     * @param $data
+     */
+    public function currentlyUpdate($data, $model, $resultApi)
+    {
+        Weather::truncate();
+
+        return $this->dailyUpdate([$data], $model, $resultApi);
+    }
+
+    /**
+     * @param $data
+     * @param $model
+     * @param $resultApi
+     * @param int $i
+     */
+    public function dailyUpdate($data, $model, $resultApi, $i = 1)
+    {
+        foreach ($data as $item) {
+            $record[$i] = clone $model;
+            $record[$i]->fill((array)$item);
+            $record[$i]->apiClass = $this->apiClass;
+            $record[$i]->locationName = $resultApi->locationName;
+            $record[$i]->location = implode(',', [
+                $resultApi->latitude,
+                $resultApi->longitude
             ]);
-
-            $validator = \Validator::make(
-                $model->getAttributes(),
-                $model->rules()
-            );
-
-            if ($validator->fails()) {
-                foreach (json_decode($validator->messages()) as $error) {
-                    dump($error);
-                }
-            } else {
-                $model->save();
-                dump('save record');
+            if(isset($item->temperatureMax)) {
+                $record[$i]->temperature = $item->temperatureMax;
+                $record[$i]->temperatureMin = $item->temperatureMin;
             }
+
+            $record[$i]->save();
+            dump('Good!'); $i++;
         }
     }
 }
